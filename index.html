@@ -3,53 +3,52 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Electrical Drawings Flashcards</title>
-  <meta name="theme-color" content="#f0f2f5" />
+  <title>Component Identification Tool</title>
+  <meta name="theme-color" content="#f8fafc" />
   <style>
-    /* THEME: Futuristic Liquid Metal (Light)
-       Palette: Chrome, Silver, Electric Cyan, Deep Slate
-    */
+    /* THEME: Aero-Glass Professional (Light Default) */
     :root {
-      --bg: #eef2f6; /* Soft cool grey background */
-      --surface: #ffffff;
-      --surface-gloss: linear-gradient(135deg, #ffffff 0%, #f3f4f6 100%);
+      /* Backgrounds */
+      --bg: #f1f5f9; /* Slate 100 - Lab clean */
+      --surface: rgba(255, 255, 255, 0.85); /* Frosted glass effect */
+      --surface-gloss: linear-gradient(180deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.5) 100%);
       
-      /* Liquid Metal Button Variables */
-      --metal-grad: linear-gradient(145deg, #ffffff, #dbe1e8);
-      --metal-border: #cbd5e1;
-      --metal-shadow: 4px 4px 10px #bfccdb, -4px -4px 10px #ffffff;
-      --metal-text: #334155;
+      /* Tech Borders */
+      --border-color: #cbd5e1;
+      --glass-border: 1px solid rgba(255, 255, 255, 0.6);
       
-      --ink: #1e293b;
-      --muted: #64748b;
-      
-      /* Accents */
-      --accent: #06b6d4; /* Electric Cyan */
-      --accent-grad: linear-gradient(135deg, #06b6d4, #0891b2);
+      /* Typography */
+      --ink: #0f172a; /* Slate 900 */
+      --muted: #64748b; /* Slate 500 */
+      --font-main: 'Segoe UI', system-ui, sans-serif;
+      --font-tech: 'Consolas', 'Monaco', monospace; /* For IDs and technical data */
+
+      /* Accents (Precision Blue) */
+      --accent: #0284c7; 
+      --accent-grad: linear-gradient(135deg, #0ea5e9, #0284c7);
       --accent-ink: #ffffff;
       
-      /* Status Colors */
+      /* Status Colors (Muted for professionalism) */
       --ok: #10b981;
       --ok-grad: linear-gradient(135deg, #34d399, #059669);
       --bad: #ef4444;
       --bad-grad: linear-gradient(135deg, #f87171, #dc2626);
       
-      --radius: 20px;
-      --font-main: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      /* UI Dimensions */
+      --radius: 12px; /* Tighter corners for professional look */
+      --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+      --shadow-lift: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
     }
 
+    /* Dark Mode Override (Cyber-Industrial) */
     [data-theme="dark"] {
-      --bg: #0f172a;
-      --surface: #1e293b;
-      --surface-gloss: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-      
-      --metal-grad: linear-gradient(145deg, #334155, #1e293b);
-      --metal-border: #475569;
-      --metal-shadow: 5px 5px 15px #0b1120, -5px -5px 15px #2d3f56;
-      --metal-text: #e2e8f0;
-      
-      --ink: #f1f5f9;
+      --bg: #0b1120;
+      --surface: rgba(30, 41, 59, 0.8);
+      --surface-gloss: linear-gradient(180deg, rgba(30,41,59,0.9) 0%, rgba(15,23,42,0.5) 100%);
+      --border-color: #334155;
+      --ink: #f8fafc;
       --muted: #94a3b8;
+      --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
     }
 
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -66,32 +65,32 @@
 
     /* Header */
     header {
-      padding: 16px 8px;
+      padding: 16px 4px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       z-index: 20;
     }
     h1 {
-      font-size: clamp(16px, 4vw, 20px);
+      font-size: 16px;
       margin: 0;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-      background: -webkit-linear-gradient(0deg, var(--ink), var(--muted));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      font-weight: 600;
       text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--muted);
+      font-family: var(--font-tech); /* Tech font for header */
     }
     .row { display: flex; gap: 10px; align-items: center; }
     .pill {
-      padding: 4px 10px;
-      border-radius: 99px;
-      background: rgba(148, 163, 184, 0.15);
+      padding: 4px 12px;
+      border-radius: 6px; /* Squarer pills */
+      background: rgba(148, 163, 184, 0.1);
       color: var(--muted);
       font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-      border: 1px solid rgba(148, 163, 184, 0.2);
+      font-weight: 500;
+      font-family: var(--font-tech);
+      border: 1px solid var(--border-color);
+      backdrop-filter: blur(4px);
     }
 
     /* Main Card Area */
@@ -101,19 +100,18 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
-      perspective: 1000px;
+      perspective: 1200px; /* Deeper perspective */
       margin: 10px 0;
     }
 
     .card {
       background: var(--surface);
       background-image: var(--surface-gloss);
+      backdrop-filter: blur(12px); /* Glass effect */
       border-radius: var(--radius);
-      padding: 24px;
-      box-shadow: 
-        0 20px 40px -10px rgba(0,0,0,0.1),
-        0 0 0 1px rgba(255,255,255,0.5) inset, /* Glass rim */
-        0 0 0 1px var(--metal-border);
+      padding: 32px;
+      box-shadow: var(--shadow-lift), inset 0 0 0 1px rgba(255,255,255,0.4);
+      border: 1px solid var(--border-color);
       
       display: flex;
       flex-direction: column;
@@ -121,7 +119,7 @@
       justify-content: center;
       text-align: center;
       height: 100%;
-      max-height: 65vh;
+      max-height: 70vh; /* Slightly taller */
       width: 100%;
       
       will-change: transform;
@@ -131,19 +129,19 @@
       overflow: hidden;
     }
 
-    /* Futuristic Circuit Accent */
-    .card::before {
+    /* Tech Accent Line */
+    .card::after {
       content: '';
       position: absolute;
-      top: 0; left: 0; right: 0; height: 4px;
+      bottom: 0; left: 0; right: 0; height: 3px;
       background: var(--accent-grad);
-      opacity: 0.8;
+      opacity: 0.6;
     }
 
     .big {
-      font-size: clamp(20px, 5vw, 32px);
-      line-height: 1.4;
-      font-weight: 600;
+      font-size: clamp(20px, 5vw, 28px);
+      line-height: 1.5;
+      font-weight: 500;
       color: var(--ink);
       white-space: pre-line;
       z-index: 2;
@@ -151,99 +149,99 @@
     
     .img {
       max-width: 100%;
-      max-height: 40vh;
-      margin: 16px auto;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      border: 1px solid var(--metal-border);
+      max-height: 35vh;
+      margin: 20px auto;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      background: #fff; /* Ensure schematic contrast */
+      padding: 10px;
     }
 
-    /* Liquid Metal Buttons */
+    /* Controls / Buttons */
     .btn {
-      border: none;
-      border-radius: 16px;
-      padding: 0 20px;
-      min-height: 48px;
-      min-width: 48px;
-      font-size: 14px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px; /* Consistent geometric radius */
+      padding: 0 24px;
+      min-height: 44px;
+      font-size: 13px;
       font-weight: 600;
+      font-family: var(--font-main);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
       cursor: pointer;
-      color: var(--metal-text);
-      background: var(--metal-grad);
-      box-shadow: var(--metal-shadow);
+      color: var(--ink);
+      background: var(--surface);
+      box-shadow: var(--shadow-soft);
       transition: all 0.2s ease;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    /* Glossy shine effect on buttons */
-    .btn::after {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; width: 100%; height: 50%;
-      background: linear-gradient(to bottom, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.1) 100%);
-      pointer-events: none;
     }
 
     .btn:active {
-      transform: translateY(2px);
-      box-shadow: 2px 2px 5px rgba(0,0,0,0.1), -2px -2px 5px rgba(255,255,255,0.5);
+      transform: translateY(1px);
+      box-shadow: none;
     }
 
     .btn.primary {
       background: var(--accent-grad);
       color: var(--accent-ink);
-      box-shadow: 0 10px 20px -5px rgba(6, 182, 212, 0.4);
+      border: none;
+      box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
     }
     
     .btn.ok {
       background: var(--ok-grad);
       color: white;
-      box-shadow: 0 10px 20px -5px rgba(16, 185, 129, 0.4);
+      border: none;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
     }
     
     .btn.bad {
       background: var(--bad-grad);
       color: white;
-      box-shadow: 0 10px 20px -5px rgba(239, 68, 68, 0.4);
+      border: none;
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
     }
     
     .btn.ghost {
       background: transparent;
       box-shadow: none;
-      border: 1px solid transparent;
+      border-color: transparent;
       color: var(--muted);
     }
     .btn.ghost:hover {
-      background: rgba(0,0,0,0.05);
-      border-color: rgba(0,0,0,0.1);
+      background: rgba(0,0,0,0.03);
+    }
+    
+    /* Icon button specific */
+    .btn.icon {
+      padding: 0;
+      width: 40px;
+      min-width: 40px;
     }
 
-    /* Controls at bottom */
+    /* Layouts */
     .fabbar {
       position: fixed;
       bottom: 24px;
       left: 0; right: 0;
       display: flex;
       justify-content: center;
-      gap: 16px;
+      gap: 12px;
       z-index: 30;
-      pointer-events: none; /* Let clicks pass through empty space */
+      pointer-events: none;
     }
     .fabbar .btn {
       pointer-events: auto;
-      border-radius: 24px;
-      min-width: 120px;
+      min-width: 140px;
+      backdrop-filter: blur(8px);
     }
 
-    /* Mark bar inside card for mobile friendliness */
     .markbar {
       display: flex;
       gap: 12px;
-      margin-top: 24px;
+      margin-top: 32px;
       width: 100%;
       justify-content: center;
     }
@@ -253,13 +251,13 @@
     }
 
     /* Animations */
-    .flip-anim { transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); transform-style: preserve-3d; }
-    .flip-phase { transform: rotateX(90deg) scale(0.95); opacity: 0.8; }
+    .flip-anim { transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); transform-style: preserve-3d; }
+    .flip-phase { transform: rotateX(90deg) scale(0.98); opacity: 0.9; }
     .flip-reset { transform: rotateX(0deg) scale(1); opacity: 1; }
     
     .swiping { transition: none!important; }
-    .swipe-right { transition: transform 0.3s ease, opacity 0.3s ease; transform: translateX(120%) rotate(10deg); opacity: 0; }
-    .swipe-left { transition: transform 0.3s ease, opacity 0.3s ease; transform: translateX(-120%) rotate(-10deg); opacity: 0; }
+    .swipe-right { transition: transform 0.3s ease, opacity 0.3s ease; transform: translateX(100px) rotate(5deg); opacity: 0; }
+    .swipe-left { transition: transform 0.3s ease, opacity 0.3s ease; transform: translateX(-100px) rotate(-5deg); opacity: 0; }
 
     .hide { display: none!important; }
     
@@ -267,8 +265,8 @@
     .sheet {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       z-index: 50;
-      background: rgba(0,0,0,0.2);
-      backdrop-filter: blur(4px);
+      background: rgba(15, 23, 42, 0.2);
+      backdrop-filter: blur(2px);
       opacity: 0; pointer-events: none; transition: opacity 0.2s;
       display: flex; justify-content: center; align-items: flex-end;
     }
@@ -276,71 +274,63 @@
     .sheet-content {
       width: 100%; max-width: 600px;
       background: var(--bg);
-      border-top-left-radius: 24px;
-      border-top-right-radius: 24px;
+      border-top: 1px solid var(--border-color);
+      border-top-left-radius: 16px;
+      border-top-right-radius: 16px;
       padding: 24px;
       padding-bottom: max(24px, env(safe-area-inset-bottom));
       max-height: 85vh;
       overflow-y: auto;
       transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      box-shadow: 0 -10px 40px rgba(0,0,0,0.2);
+      box-shadow: 0 -10px 40px rgba(0,0,0,0.1);
     }
     .sheet.open .sheet-content { transform: translateY(0); }
     
-    .sheet h2 { margin: 0 0 20px; font-size: 20px; color: var(--ink); }
+    .sheet h2 { margin: 0 0 20px; font-size: 18px; color: var(--ink); font-weight:600; }
     .controls-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     .full { grid-column: span 2; }
     
     .fieldset {
       background: var(--surface);
       padding: 12px;
-      border-radius: 12px;
-      border: 1px solid var(--metal-border);
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
     }
-    .label { font-size: 12px; color: var(--muted); margin-bottom: 6px; display: block; font-weight: 600; text-transform: uppercase; }
-    .select, .range, .chk { width: 100%; }
+    .label { font-size: 11px; color: var(--muted); margin-bottom: 8px; display: block; font-weight: 700; text-transform: uppercase; letter-spacing:0.5px; }
+    .select, .range, .chk { width: 100%; padding: 4px; border: 1px solid var(--border-color); border-radius: 4px; background:transparent; color: var(--ink); }
 
-    /* Helper for keyboard hints */
-    .kbd {
-      background: rgba(0,0,0,0.05);
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-family: monospace;
-      font-size: 0.9em;
-      border: 1px solid rgba(0,0,0,0.1);
-    }
   </style>
 </head>
 <body>
 
 <div class="wrap">
   <header>
-    <h1>Drawings & Schematics</h1>
+    <h1>Component Database</h1>
     <div class="row">
-      <span id="status" class="pill">Loading...</span>
-      <button id="openControls" class="btn icon ghost" style="width:40px;height:40px;min-width:auto;min-height:auto">⚙️</button>
+      <span id="status" class="pill">System Check...</span>
+      <button id="openControls" class="btn icon ghost">⚙️</button>
     </div>
   </header>
 
   <main class="card-container" id="cardContainer">
     <div class="card" id="card">
-      <div class="row" style="width:100%; justify-content:space-between; position:absolute; top:20px; left:0; padding:0 24px;">
-        <span class="pill">ID: <b id="indexLabel">—</b></span>
-        <div class="pill">Tap or Space to Flip</div>
+      <div class="row" style="width:100%; justify-content:space-between; position:absolute; top:24px; left:0; padding:0 32px;">
+        <span class="pill">REF: <b id="indexLabel" style="font-family:var(--font-tech)">—</b></span>
+        <div class="pill">Tap / Space to Scan</div>
       </div>
 
       <div id="face" class="big">
-        Tap <b>Start</b> to begin.<br><br>
-        <small style="color:var(--muted);font-weight:400;font-size:16px;">
-          Review electrical symbols, schematic logic, and wiring diagrams.
+        Initialize Session.<br><br>
+        <small style="color:var(--muted);font-weight:400;font-size:15px; font-family: var(--font-main);">
+          Identify standard electrical components and symbols.
         </small>
       </div>
       
       <img id="img" class="img hide" alt="" />
 
       <div class="markbar">
-        <button id="again" class="btn bad">Review</button>
-        <button id="good" class="btn ok">Mastered</button>
+        <button id="again" class="btn bad">Re-Evaluate</button>
+        <button id="good" class="btn ok">Verified</button>
       </div>
     </div>
   </main>
@@ -348,48 +338,47 @@
 
 <div class="fabbar">
   <button id="start" class="btn primary">Start Session</button>
-  <button id="next" class="btn hide">Next Card</button>
+  <button id="next" class="btn hide">Next Component</button>
 </div>
 
-<!-- Settings Modal -->
 <div id="sheet" class="sheet" aria-hidden="true">
   <div class="sheet-content">
     <div class="row" style="justify-content:space-between; margin-bottom:16px;">
-      <h2>Settings</h2>
-      <button id="closeSheet" class="btn ghost" style="min-width:40px;">✕</button>
+      <h2>Configuration</h2>
+      <button id="closeSheet" class="btn ghost icon">✕</button>
     </div>
     
     <div class="controls-grid">
       <div class="fieldset">
-        <label class="label">Theme</label>
-        <select id="themeSel" class="select" style="width:100%; padding:8px;">
-          <option value="light">Liquid Metal (Light)</option>
-          <option value="dark">Cyber Dark</option>
+        <label class="label">Interface Mode</label>
+        <select id="themeSel" class="select">
+          <option value="light">Aero Light (Default)</option>
+          <option value="dark">Cyber Industrial</option>
         </select>
       </div>
       <div class="fieldset">
-        <label class="label">Shuffle</label>
-        <select id="mode" class="select" style="width:100%; padding:8px;">
-          <option value="random" selected>Random</option>
-          <option value="ordered">Ordered</option>
+        <label class="label">Sequence</label>
+        <select id="mode" class="select">
+          <option value="random" selected>Randomized</option>
+          <option value="ordered">Sequential</option>
         </select>
       </div>
       <div class="fieldset full">
-        <label class="label">Audio</label>
+        <label class="label">Audio Readout</label>
         <div class="row">
-          <label><input id="speakFront" type="checkbox"> Speak Front</label>
-          <label><input id="speakBack" type="checkbox"> Speak Back</label>
+          <label><input id="speakFront" type="checkbox"> Read Query</label>
+          <label><input id="speakBack" type="checkbox"> Read Data</label>
         </div>
       </div>
       <div class="fieldset full">
-        <label class="label">Data</label>
-        <button id="resetProgress" class="btn ghost" style="width:100%; color:var(--bad)">Reset All Progress</button>
+        <label class="label">Database</label>
+        <button id="resetProgress" class="btn ghost" style="width:100%; color:var(--bad)">Clear Cache & Reset</button>
       </div>
       <div class="fieldset full">
-        <label class="label">Stats</label>
+        <label class="label">Session Stats</label>
         <div class="row" style="flex-wrap:wrap; gap:8px;">
-          <span class="pill">Known: <b id="statKnown">0</b></span>
-          <span class="pill">To Learn: <b id="statUnknown">0</b></span>
+          <span class="pill">Verified: <b id="statKnown" style="color:var(--ok)">0</b></span>
+          <span class="pill">Pending: <b id="statUnknown" style="color:var(--accent)">0</b></span>
         </div>
       </div>
     </div>
@@ -397,26 +386,25 @@
 </div>
 
 <script>
-// ===== ELECTRICAL DRAWINGS FLASHCARDS CONFIG =====
-// Re-branded and isolated from NPPE app
+// ===== COMPONENT DATABASE LOGIC =====
 
 const CSV_URL = 'assets/cards.csv'; 
-const STORAGE_KEY = 'elec_drawings_progress_v1';
-const AUDIO_KEY = 'elec_audio_prefs_v1';
-const THEME_KEY = 'elec_theme_v1';
+const STORAGE_KEY = 'elec_comp_progress_v1';
+const AUDIO_KEY = 'elec_comp_audio_v1';
+const THEME_KEY = 'elec_comp_theme_v1';
 
-// Default "Sample" Deck if no CSV is found
+// Default "Sample" Deck adapted for Electrical Components
 const SAMPLE_DECK = `id,front,back
-1,Symbol: Zig-zag line,"Resistor (Opposition to current flow)"
-2,Symbol: Two parallel lines of equal length,"Capacitor"
-3,Symbol: Two parallel lines; one shorter and thicker,"Battery / DC Voltage Source"
-4,Symbol: Circle with an 'M',"Motor"
-5,NO Contact,"Normally Open (Open circuit when de-energized)"
-6,NC Contact,"Normally Closed (Closed circuit when de-energized)"
-7,Symbol: Three horizontal lines of decreasing width,"Ground / Earth"
-8,Schematic vs Wiring Diagram,"Schematic shows logic/function. Wiring shows physical connections."
-9,Symbol: Circle with a cross,"Light Bulb / Lamp"
-10,Relay Coil Symbol,"Circle (often with letter K or CR inside)"`;
+1,"Component: Reduces current flow, divides voltage","Resistor"
+2,"Component: Stores electrical energy in an electric field","Capacitor"
+3,"Component: Stores energy in a magnetic field, opposes change in current","Inductor"
+4,"Component: Allows current to flow in only one direction","Diode"
+5,"Component: Electrically operated switch used to control a circuit","Relay"
+6,"Component: Converts electrical energy into mechanical motion","Electric Motor"
+7,"Component: Protects circuit by melting when current is too high","Fuse"
+8,"Component: Semiconductor device used to amplify or switch signals","Transistor"
+9,"Component: Step-up or step-down AC voltage levels","Transformer"
+10,"Component: Measures electrical potential difference","Voltmeter"`;
 
 const DELAY_NEXT_MS = 350; 
 const DELAY_FLIP_MS = 800;
@@ -425,9 +413,9 @@ let deck = [];
 let cursor = -1;
 let showingBack = false;
 let voices = [];
-let audioPrefs = { voiceURI: '', rate: 1.0, speakFront: true, speakBack: false }; // Defaults adjusted for diagrams
+let audioPrefs = { voiceURI: '', rate: 1.0, speakFront: true, speakBack: false };
 let speakTimer = null;
-let pending = []; // Queue for immediate re-show
+let pending = []; 
 let isFlipping = false;
 
 // DOM Elements
@@ -448,7 +436,6 @@ const statUnknown = $('#statUnknown');
   loadTheme();
   loadAudioPrefs();
   
-  // Load Voices
   if ('speechSynthesis' in window) {
     speechSynthesis.onvoiceschanged = () => { voices = speechSynthesis.getVoices(); };
   }
@@ -460,10 +447,10 @@ const statUnknown = $('#statUnknown');
       const response = await fetch(CSV_URL);
       if (!response.ok) throw new Error("No CSV");
       text = await response.text();
-      status.textContent = 'CSV Loaded';
+      status.textContent = 'DB Loaded';
     } catch {
       text = SAMPLE_DECK;
-      status.textContent = 'Ready';
+      status.textContent = 'Standby';
     }
     
     deck = parseCSV(text).map((r, i) => ({
@@ -472,7 +459,7 @@ const statUnknown = $('#statUnknown');
       back: r[2],
       known: false,
       seen: 0
-    })).filter(c => c.front && c.back); // Filter empty rows
+    })).filter(c => c.front && c.back);
 
     loadProgress();
     updateStats();
@@ -507,16 +494,14 @@ document.addEventListener('keydown', e => {
 
 // Core Functions
 function next() {
-  // Logic: 20% chance to see a pending "unknown" card if available, else random
   let pool = deck.filter(c => !c.known);
   
   if (pool.length === 0) {
-    face.innerHTML = "🎉 All Cards Mastered!<br><small>Reset progress in settings to restart.</small>";
+    face.innerHTML = "✅ Database Complete.<br><small>All components verified.</small>";
     hideImage();
     return;
   }
 
-  // Pick card
   const r = Math.floor(Math.random() * pool.length);
   const nextCard = pool[r];
   cursor = deck.findIndex(c => c.id === nextCard.id);
@@ -547,7 +532,6 @@ function render() {
   idxLabel.textContent = c.id;
   face.innerHTML = showingBack ? escapeHtml(c.back) : escapeHtml(c.front);
   
-  // Image handling (basic)
   hideImage();
   if (showingBack) tryShowImage(c.id);
 
@@ -561,7 +545,6 @@ function grade(isKnown) {
   saveProgress();
   updateStats();
   
-  // Visual feedback
   const anim = isKnown ? 'swipe-right' : 'swipe-left';
   cardEl.classList.add(anim);
   setTimeout(() => {
@@ -570,18 +553,15 @@ function grade(isKnown) {
   }, 250);
 }
 
-// Data & Helpers
+function hideImage() { img.classList.add('hide'); img.removeAttribute('src'); }
+
 function parseCSV(str) {
-  // Simple parser assuming id,front,back header
   const lines = str.split('\n').filter(l => l.trim().length > 0);
   const data = [];
-  // Skip header if present
   const start = lines[0].toLowerCase().includes('front') ? 1 : 0;
   
   for (let i = start; i < lines.length; i++) {
-    // Basic CSV regex to handle quotes
     const parts = lines[i].match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g); 
-    // Fallback split if regex fails or simple CSV
     const cols = parts ? parts.map(p => p.replace(/^"|"$/g, '')) : lines[i].split(',');
     if (cols.length >= 2) data.push(cols);
   }
@@ -620,7 +600,6 @@ function escapeHtml(text) {
     .replace(/'/g, "&#039;");
 }
 
-// Theme
 function loadTheme() {
   const t = localStorage.getItem(THEME_KEY) || 'light';
   document.documentElement.setAttribute('data-theme', t);
@@ -631,7 +610,6 @@ function saveTheme(t) {
   document.documentElement.setAttribute('data-theme', t);
 }
 
-// Audio
 function loadAudioPrefs() {
   try {
     const s = JSON.parse(localStorage.getItem(AUDIO_KEY));
@@ -660,10 +638,8 @@ function speakText(txt, side) {
   }, 200);
 }
 
-// Basic Image loader for back of card
 function tryShowImage(id) {
   img.classList.add('hide');
-  // In a real app, you'd know the extension. Here we blindly try PNG then JPG
   img.onerror = () => {
     if (img.src.endsWith('.png')) img.src = `assets/images/${id}.jpg`;
     else if (img.src.endsWith('.jpg')) img.src = `assets/images/${id}.svg`;
@@ -672,9 +648,8 @@ function tryShowImage(id) {
   img.src = `assets/images/${id}.png`;
 }
 
-// Reset Logic
 $('#resetProgress').addEventListener('click', () => {
-  if(confirm("Reset all progress?")) {
+  if(confirm("Clear local cache and reset database?")) {
     deck.forEach(c => { c.known = false; c.seen = 0; });
     saveProgress();
     updateStats();
