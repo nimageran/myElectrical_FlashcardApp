@@ -3,56 +3,54 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Electrical Knowledge Flashcards</title>
-  <meta name="theme-color" content="#f8fafc" />
+  <title>Electrical Knowledge</title>
+  <meta name="theme-color" content="#f5f5f4" />
   <style>
-    /* THEME: Clean-Room Engineering (Light)
-       Palette: Aerospace White, Technical Slate, Safety Orange
+    /* THEME: Warm Industrial Metal (Light)
+       Palette: Chrome, Warm Silver, Industrial Orange, Charcoal
     */
     :root {
-      /* Backgrounds */
-      --bg: #f8fafc; /* Crisp white-blue tint */
+      --bg: #f5f5f4; /* Changed: Warmer grey background */
       --surface: #ffffff;
+      --surface-gloss: linear-gradient(135deg, #ffffff 0%, #e7e5e4 100%); /* Changed: Warmer gloss */
       
-      /* The "Card" Look - Matte Finish */
-      --surface-gloss: linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%);
+      /* Liquid Metal Button Variables */
+      --metal-grad: linear-gradient(145deg, #ffffff, #e7e5e4); /* Changed: Warmer metal */
+      --metal-border: #d6d3d1; /* Changed: Warmer border */
+      --metal-shadow: 4px 4px 10px #d1d5db, -4px -4px 10px #ffffff;
+      --metal-text: #44403c; /* Changed: Warmer text */
       
-      /* Button Styling - Physical Switches */
-      --metal-grad: linear-gradient(180deg, #f8fafc, #e2e8f0);
-      --metal-border: #cbd5e1;
-      --metal-shadow: 0 2px 0 #94a3b8; /* Hard shadow for "clicky" feel */
-      --metal-text: #475569;
+      --ink: #292524; /* Changed: Warm charcoal ink */
+      --muted: #78716c; /* Changed: Warm muted tone */
       
-      --ink: #0f172a;       /* Deepest navy/black for text */
-      --muted: #64748b;     /* Slate grey for secondary text */
-      
-      /* Accents - "Safety Orange" for visibility */
-      --accent: #f97316; 
-      --accent-grad: linear-gradient(180deg, #fb923c, #ea580c);
+      /* Accents */
+      --accent: #ea580c; /* Changed: Industrial Orange */
+      --accent-grad: linear-gradient(135deg, #ea580c, #c2410c); /* Changed: Orange gradient */
       --accent-ink: #ffffff;
       
-      /* Status Colors - Flat & Functional */
-      --ok: #10b981;
-      --ok-grad: linear-gradient(180deg, #34d399, #059669);
-      --bad: #ef4444;
-      --bad-grad: linear-gradient(180deg, #f87171, #dc2626);
+      /* Status Colors (Kept similar but slightly warmer) */
+      --ok: #16a34a;
+      --ok-grad: linear-gradient(135deg, #22c55e, #15803d);
+      --bad: #dc2626;
+      --bad-grad: linear-gradient(135deg, #ef4444, #b91c1c);
       
-      --radius: 8px; /* Tighter radius for a more engineered look */
+      --radius: 20px;
       --font-main: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     }
 
     [data-theme="dark"] {
-      --bg: #0f172a;
-      --surface: #1e293b;
-      --surface-gloss: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+      /* THEME CHANGE: Dark cool slate -> Dark warm grey */
+      --bg: #1c1917;
+      --surface: #292524;
+      --surface-gloss: linear-gradient(135deg, #292524 0%, #1c1917 100%);
       
-      --metal-grad: linear-gradient(180deg, #334155, #1e293b);
-      --metal-border: #475569;
-      --metal-shadow: 0 2px 0 #020617;
-      --metal-text: #cbd5e1;
+      --metal-grad: linear-gradient(145deg, #44403c, #292524);
+      --metal-border: #57534e;
+      --metal-shadow: 5px 5px 15px #0c0a09, -5px -5px 15px #44403c;
+      --metal-text: #e7e5e4;
       
-      --ink: #f1f5f9;
-      --muted: #94a3b8;
+      --ink: #fafaf9;
+      --muted: #a8a29e;
     }
 
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -74,27 +72,27 @@
       justify-content: space-between;
       align-items: center;
       z-index: 20;
-      border-bottom: 1px solid rgba(0,0,0,0.05);
     }
     h1 {
       font-size: clamp(16px, 4vw, 20px);
       margin: 0;
-      font-weight: 800;
-      letter-spacing: 0.5px;
-      color: var(--ink);
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      background: -webkit-linear-gradient(0deg, var(--ink), var(--muted));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
       text-transform: uppercase;
     }
     .row { display: flex; gap: 10px; align-items: center; }
     .pill {
       padding: 4px 10px;
-      border-radius: 4px; /* Tech square look */
-      background: rgba(148, 163, 184, 0.1);
+      border-radius: 99px;
+      background: rgba(148, 163, 184, 0.15);
       color: var(--muted);
       font-size: 11px;
-      font-weight: 700;
+      font-weight: 600;
       letter-spacing: 0.5px;
-      border: 1px solid rgba(148, 163, 184, 0.3);
-      text-transform: uppercase;
+      border: 1px solid rgba(148, 163, 184, 0.2);
     }
 
     /* Main Card Area */
@@ -114,8 +112,8 @@
       border-radius: var(--radius);
       padding: 24px;
       box-shadow: 
-        0 4px 6px -1px rgba(0, 0, 0, 0.1), 
-        0 2px 4px -1px rgba(0, 0, 0, 0.06),
+        0 20px 40px -10px rgba(0,0,0,0.1),
+        0 0 0 1px rgba(255,255,255,0.5) inset, /* Glass rim */
         0 0 0 1px var(--metal-border);
       
       display: flex;
@@ -134,12 +132,13 @@
       overflow: hidden;
     }
 
-    /* Tech Accent Stripe */
+    /* Futuristic Circuit Accent */
     .card::before {
       content: '';
       position: absolute;
-      top: 0; left: 0; right: 0; height: 6px;
-      background: var(--accent);
+      top: 0; left: 0; right: 0; height: 4px;
+      background: var(--accent-grad);
+      opacity: 0.8;
     }
 
     .big {
@@ -155,57 +154,62 @@
       max-width: 100%;
       max-height: 40vh;
       margin: 16px auto;
-      border-radius: 4px;
-      box-shadow: 0 0 0 1px var(--metal-border);
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      border: 1px solid var(--metal-border);
     }
 
-    /* Tech Buttons */
+    /* Liquid Metal Buttons */
     .btn {
-      border: 1px solid var(--metal-border);
-      border-radius: 6px; /* Squarer buttons */
+      border: none;
+      border-radius: 16px;
       padding: 0 20px;
       min-height: 48px;
       min-width: 48px;
       font-size: 14px;
-      font-weight: 700;
+      font-weight: 600;
       cursor: pointer;
       color: var(--metal-text);
       background: var(--metal-grad);
       box-shadow: var(--metal-shadow);
-      transition: all 0.1s ease; /* Snappier transition */
+      transition: all 0.2s ease;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       position: relative;
       overflow: hidden;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+    }
+
+    /* Glossy shine effect on buttons */
+    .btn::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 50%;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.1) 100%);
+      pointer-events: none;
     }
 
     .btn:active {
       transform: translateY(2px);
-      box-shadow: none; /* Shadow disappears on press */
+      box-shadow: 2px 2px 5px rgba(0,0,0,0.1), -2px -2px 5px rgba(255,255,255,0.5);
     }
 
     .btn.primary {
       background: var(--accent-grad);
       color: var(--accent-ink);
-      border-color: #c2410c;
-      box-shadow: 0 2px 0 #c2410c;
+      box-shadow: 0 10px 20px -5px rgba(234, 88, 12, 0.4); /* Changed shadow color */
     }
     
     .btn.ok {
       background: var(--ok-grad);
       color: white;
-      border-color: #047857;
-      box-shadow: 0 2px 0 #047857;
+      box-shadow: 0 10px 20px -5px rgba(22, 163, 74, 0.4); /* Changed shadow color */
     }
     
     .btn.bad {
       background: var(--bad-grad);
       color: white;
-      border-color: #b91c1c;
-      box-shadow: 0 2px 0 #b91c1c;
+      box-shadow: 0 10px 20px -5px rgba(220, 38, 38, 0.4); /* Changed shadow color */
     }
     
     .btn.ghost {
@@ -228,13 +232,15 @@
       justify-content: center;
       gap: 16px;
       z-index: 30;
-      pointer-events: none;
+      pointer-events: none; /* Let clicks pass through empty space */
     }
     .fabbar .btn {
       pointer-events: auto;
-      min-width: 140px;
+      border-radius: 24px;
+      min-width: 120px;
     }
 
+    /* Mark bar inside card for mobile friendliness */
     .markbar {
       display: flex;
       gap: 12px;
@@ -262,8 +268,8 @@
     .sheet {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       z-index: 50;
-      background: rgba(0,0,0,0.4);
-      backdrop-filter: blur(2px);
+      background: rgba(0,0,0,0.2);
+      backdrop-filter: blur(4px);
       opacity: 0; pointer-events: none; transition: opacity 0.2s;
       display: flex; justify-content: center; align-items: flex-end;
     }
@@ -271,29 +277,28 @@
     .sheet-content {
       width: 100%; max-width: 600px;
       background: var(--bg);
-      border-top-left-radius: 12px;
-      border-top-right-radius: 12px;
+      border-top-left-radius: 24px;
+      border-top-right-radius: 24px;
       padding: 24px;
       padding-bottom: max(24px, env(safe-area-inset-bottom));
       max-height: 85vh;
       overflow-y: auto;
       transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
       box-shadow: 0 -10px 40px rgba(0,0,0,0.2);
-      border-top: 4px solid var(--accent);
     }
     .sheet.open .sheet-content { transform: translateY(0); }
     
-    .sheet h2 { margin: 0 0 20px; font-size: 20px; color: var(--ink); text-transform: uppercase; letter-spacing: 1px; }
+    .sheet h2 { margin: 0 0 20px; font-size: 20px; color: var(--ink); }
     .controls-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     .full { grid-column: span 2; }
     
     .fieldset {
       background: var(--surface);
       padding: 12px;
-      border-radius: 6px;
+      border-radius: 12px;
       border: 1px solid var(--metal-border);
     }
-    .label { font-size: 11px; color: var(--muted); margin-bottom: 6px; display: block; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+    .label { font-size: 12px; color: var(--muted); margin-bottom: 6px; display: block; font-weight: 600; text-transform: uppercase; }
     .select, .range, .chk { width: 100%; }
 
     /* Helper for keyboard hints */
@@ -311,10 +316,10 @@
 
 <div class="wrap">
   <header>
-    <h1>Electrical Knowledge</h1>
+    <h1>Drawings & Schematics</h1>
     <div class="row">
       <span id="status" class="pill">Loading...</span>
-      <button id="openControls" class="btn icon ghost" style="width:40px;height:40px;min-width:auto;min-height:auto;border:none;box-shadow:none;">⚙️</button>
+      <button id="openControls" class="btn icon ghost" style="width:40px;height:40px;min-width:auto;min-height:auto">⚙️</button>
     </div>
   </header>
 
@@ -358,7 +363,7 @@
       <div class="fieldset">
         <label class="label">Theme</label>
         <select id="themeSel" class="select" style="width:100%; padding:8px;">
-          <option value="light">Engineering (Light)</option>
+          <option value="light">Liquid Metal (Light)</option>
           <option value="dark">Cyber Dark</option>
         </select>
       </div>
@@ -378,7 +383,7 @@
       </div>
       <div class="fieldset full">
         <label class="label">Data</label>
-        <button id="resetProgress" class="btn ghost" style="width:100%; color:var(--bad);border-color:var(--bad)">Reset All Progress</button>
+        <button id="resetProgress" class="btn ghost" style="width:100%; color:var(--bad)">Reset All Progress</button>
       </div>
       <div class="fieldset full">
         <label class="label">Stats</label>
@@ -392,7 +397,7 @@
 </div>
 
 <script>
-// ===== ELECTRICAL KNOWLEDGE FLASHCARDS CONFIG =====
+// ===== ELECTRICAL DRAWINGS FLASHCARDS CONFIG =====
 // Re-branded and isolated from NPPE app
 
 const CSV_URL = 'assets/cards.csv'; 
@@ -676,10 +681,6 @@ $('#resetProgress').addEventListener('click', () => {
     next();
   }
 });
-
-function hideImage() {
-    img.classList.add('hide');
-}
 </script>
 </body>
 </html>
