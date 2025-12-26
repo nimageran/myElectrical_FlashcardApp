@@ -3,393 +3,158 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Electrical Drawings Flashcards</title>
-  <meta name="theme-color" content="#f0f2f5" />
+  <title>Nima Flashcards – Clean UI + Animations + Requeue</title>
+  <meta name="theme-color" content="#f8fafc" />
   <style>
-    /* THEME: Futuristic Liquid Metal (Light)
-       Palette: Chrome, Silver, Electric Cyan, Deep Slate
-    */
-    :root {
-      --bg: #eef2f6; /* Soft cool grey background */
-      --surface: #ffffff;
-      --surface-gloss: linear-gradient(135deg, #ffffff 0%, #f3f4f6 100%);
-      
-      /* Liquid Metal Button Variables */
-      --metal-grad: linear-gradient(145deg, #ffffff, #dbe1e8);
-      --metal-border: #cbd5e1;
-      --metal-shadow: 4px 4px 10px #bfccdb, -4px -4px 10px #ffffff;
-      --metal-text: #334155;
-      
-      --ink: #1e293b;
-      --muted: #64748b;
-      
-      /* Accents */
-      --accent: #06b6d4; /* Electric Cyan */
-      --accent-grad: linear-gradient(135deg, #06b6d4, #0891b2);
-      --accent-ink: #ffffff;
-      
-      /* Status Colors */
-      --ok: #10b981;
-      --ok-grad: linear-gradient(135deg, #34d399, #059669);
-      --bad: #ef4444;
-      --bad-grad: linear-gradient(135deg, #f87171, #dc2626);
-      
-      --radius: 20px;
-      --font-main: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    }
+    :root{ --bg:#ffffff; --surface:#f8fafc; --border:#e5e7eb; --ink:#0f172a; --muted:#64748b; --accent:#2563eb; --accent-ink:#ffffff; --radius:18px; --ok:#16a34a; --bad:#dc2626; }
+    [data-theme="dark"]{ --bg:#0f172a; --surface:#1e293b; --border:#334155; --ink:#f1f5f9; --muted:#94a3b8; --accent:#3b82f6; --accent-ink:#ffffff; --ok:#22c55e; --bad:#ef4444; }
+    [data-theme="neon-purple"]{ --bg:#faf5ff; --surface:#f3e8ff; --border:#e9d5ff; --ink:#581c87; --muted:#7c3aed; --accent:#a855f7; --accent-ink:#ffffff; --ok:#10b981; --bad:#f43f5e; }
+    [data-theme="neon-blue"]{ --bg:#eff6ff; --surface:#dbeafe; --border:#bfdbfe; --ink:#1e3a8a; --muted:#3b82f6; --accent:#0ea5e9; --accent-ink:#ffffff; --ok:#14b8a6; --bad:#f43f5e; }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Inter,Roboto,Arial;transition:background-color 0.3s, color 0.3s;}
+    .wrap{max-width:min(900px,92vw);margin:0 auto;padding:env(safe-area-inset-top) clamp(12px,2.5vw,24px) calc(56px + env(safe-area-inset-bottom))}
 
-    [data-theme="dark"] {
-      --bg: #0f172a;
-      --surface: #1e293b;
-      --surface-gloss: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-      
-      --metal-grad: linear-gradient(145deg, #334155, #1e293b);
-      --metal-border: #475569;
-      --metal-shadow: 5px 5px 15px #0b1120, -5px -5px 15px #2d3f56;
-      --metal-text: #e2e8f0;
-      
-      --ink: #f1f5f9;
-      --muted: #94a3b8;
-    }
+    header{position:sticky;top:0;background:var(--bg);backdrop-filter:saturate(1.2) blur(8px);z-index:20;padding:10px 0 12px;border-bottom:1px solid var(--border);}
+    h1{font-size:clamp(18px,2vw,20px);margin:0}
+    .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .pill{padding:6px 10px;border-radius:999px;border:1px solid var(--border);color:var(--muted);font-size:12px;background:var(--bg)}
 
-    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    html, body { height: 100%; margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font-main); transition: background-color 0.3s, color 0.3s; overflow: hidden; }
-    
-    .wrap {
-      height: 100%;
-      max-width: min(800px, 94vw);
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      padding: env(safe-area-inset-top) 0 calc(70px + env(safe-area-inset-bottom));
-    }
+    main.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:clamp(12px,2.5vw,20px); will-change: transform;margin-top:16px;}
+    .big{font-size:clamp(19px,3.6vw,30px);line-height:1.35;text-align:center;min-height:clamp(140px,32vh,300px);padding:clamp(12px,2.5vw,18px);user-select:none; cursor:pointer;display:flex;align-items:center;justify-content:center;white-space: pre-line;}
+    .img{max-width:100%;max-height:clamp(42vh,50vh,60vh);display:block;margin:8px auto 6px;border-radius:12px;border:1px solid var(--border); cursor:pointer;}
+    .muted{color:var(--muted);font-size:12px}
+    .grid{display:grid;gap:10px}
 
-    /* Header */
-    header {
-      padding: 16px 8px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      z-index: 20;
-    }
-    h1 {
-      font-size: clamp(16px, 4vw, 20px);
-      margin: 0;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-      background: -webkit-linear-gradient(0deg, var(--ink), var(--muted));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      text-transform: uppercase;
-    }
-    .row { display: flex; gap: 10px; align-items: center; }
-    .pill {
-      padding: 4px 10px;
-      border-radius: 99px;
-      background: rgba(148, 163, 184, 0.15);
-      color: var(--muted);
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-      border: 1px solid rgba(148, 163, 184, 0.2);
-    }
+    .markbar{display:flex;gap:10px;justify-content:center;align-items:center;margin-top:8px}
+    .btn{padding:12px 16px;border-radius:14px;border:1px solid var(--border);background:var(--bg);color:var(--ink);cursor:pointer;min-height:44px;min-width:44px;font-size:14px;}
+    .btn.ok{background:var(--ok);color:#fff;border-color:#15803d}
+    .btn.bad{background:var(--bad);color:#fff;border-color:#b91c1c}
 
-    /* Main Card Area */
-    main.card-container {
-      flex: 1;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      perspective: 1000px;
-      margin: 10px 0;
-    }
+    .fabbar{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;gap:10px;justify-content:center;align-items:center;padding:12px clamp(10px,3vw,18px) calc(12px + env(safe-area-inset-bottom));background:var(--bg);border-top:1px solid var(--border);backdrop-filter:blur(8px)}
 
-    .card {
-      background: var(--surface);
-      background-image: var(--surface-gloss);
-      border-radius: var(--radius);
-      padding: 24px;
-      box-shadow: 
-        0 20px 40px -10px rgba(0,0,0,0.1),
-        0 0 0 1px rgba(255,255,255,0.5) inset, /* Glass rim */
-        0 0 0 1px var(--metal-border);
-      
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      height: 100%;
-      max-height: 65vh;
-      width: 100%;
-      
-      will-change: transform;
-      user-select: none;
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-    }
+    .btn.primary{background:var(--accent);color:var(--accent-ink);border-color:#1d4ed8;font-weight:600}
+    .btn.icon{width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;font-size:20px;padding:0;}
+    .ghost{background:transparent;border:none;}
 
-    /* Futuristic Circuit Accent */
-    .card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0; height: 4px;
-      background: var(--accent-grad);
-      opacity: 0.8;
-    }
+    .sheet{position:fixed;left:0;right:0;bottom:-100%;z-index:50;background:var(--bg);border-top-left-radius:16px;border-top-right-radius:16px;border:1px solid var(--border);box-shadow:0 -12px 30px rgba(0,0,0,.15);transition:bottom .25s ease-out;max-height:85vh;overflow-y:auto}
+    .sheet.open{bottom:0}
+    .sheet .handle{width:44px;height:5px;background:var(--border);border-radius:999px;margin:12px auto 8px}
+    .sheet-header{position:sticky;top:0;background:var(--bg);z-index:10;padding:12px clamp(14px,4vw,20px);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+    .sheet-header h2{margin:0;font-size:18px;color:var(--ink);font-weight:600;}
+    .btn.close{width:40px;height:40px;padding:0;display:inline-flex;align-items:center;justify-content:center;font-size:28px;line-height:1;font-weight:300;background:var(--surface);min-height:40px;min-width:40px;}
+    .sheet .content{max-width:900px;margin:0 auto;padding:16px clamp(14px,4vw,20px) calc(24px + env(safe-area-inset-bottom))}
+    .controls-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+    .fieldset{border:1px solid var(--border);border-radius:12px;padding:12px;background:var(--surface)}
+    .label{display:block;font-size:13px;color:var(--muted);margin-bottom:8px;font-weight:500;}
+    .select,.chk,.range{width:100%;padding:10px 12px;border-radius:12px;border:1px solid var(--border);background:var(--bg);color:var(--ink);min-height:44px;font-size:14px;}
 
-    .big {
-      font-size: clamp(20px, 5vw, 32px);
-      line-height: 1.4;
-      font-weight: 600;
-      color: var(--ink);
-      white-space: pre-line;
-      z-index: 2;
-    }
-    
-    .img {
-      max-width: 100%;
-      max-height: 40vh;
-      margin: 16px auto;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      border: 1px solid var(--metal-border);
-    }
+    /* Flip + Swipe animations */
+    .flip-anim{ transition: transform .24s ease; transform-style: preserve-3d; }
+    .flip-phase{ transform: rotateY(90deg); }
+    .flip-reset{ transform: rotateY(0deg); }
+    .swiping{ transition: none!important; }
+    .swipe-right{ transition: transform .26s ease, opacity .26s ease; transform: translateX(120%) rotate(5deg); opacity:.0 }
+    .swipe-left{ transition: transform .26s ease, opacity .26s ease; transform: translateX(-120%) rotate(-5deg); opacity:.0 }
 
-    /* Liquid Metal Buttons */
-    .btn {
-      border: none;
-      border-radius: 16px;
-      padding: 0 20px;
-      min-height: 48px;
-      min-width: 48px;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      color: var(--metal-text);
-      background: var(--metal-grad);
-      box-shadow: var(--metal-shadow);
-      transition: all 0.2s ease;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    /* Glossy shine effect on buttons */
-    .btn::after {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; width: 100%; height: 50%;
-      background: linear-gradient(to bottom, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.1) 100%);
-      pointer-events: none;
-    }
-
-    .btn:active {
-      transform: translateY(2px);
-      box-shadow: 2px 2px 5px rgba(0,0,0,0.1), -2px -2px 5px rgba(255,255,255,0.5);
-    }
-
-    .btn.primary {
-      background: var(--accent-grad);
-      color: var(--accent-ink);
-      box-shadow: 0 10px 20px -5px rgba(6, 182, 212, 0.4);
-    }
-    
-    .btn.ok {
-      background: var(--ok-grad);
-      color: white;
-      box-shadow: 0 10px 20px -5px rgba(16, 185, 129, 0.4);
-    }
-    
-    .btn.bad {
-      background: var(--bad-grad);
-      color: white;
-      box-shadow: 0 10px 20px -5px rgba(239, 68, 68, 0.4);
-    }
-    
-    .btn.ghost {
-      background: transparent;
-      box-shadow: none;
-      border: 1px solid transparent;
-      color: var(--muted);
-    }
-    .btn.ghost:hover {
-      background: rgba(0,0,0,0.05);
-      border-color: rgba(0,0,0,0.1);
-    }
-
-    /* Controls at bottom */
-    .fabbar {
-      position: fixed;
-      bottom: 24px;
-      left: 0; right: 0;
-      display: flex;
-      justify-content: center;
-      gap: 16px;
-      z-index: 30;
-      pointer-events: none; /* Let clicks pass through empty space */
-    }
-    .fabbar .btn {
-      pointer-events: auto;
-      border-radius: 24px;
-      min-width: 120px;
-    }
-
-    /* Mark bar inside card for mobile friendliness */
-    .markbar {
-      display: flex;
-      gap: 12px;
-      margin-top: 24px;
-      width: 100%;
-      justify-content: center;
-    }
-    .markbar .btn {
-      flex: 1;
-      max-width: 140px;
-    }
-
-    /* Animations */
-    .flip-anim { transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); transform-style: preserve-3d; }
-    .flip-phase { transform: rotateX(90deg) scale(0.95); opacity: 0.8; }
-    .flip-reset { transform: rotateX(0deg) scale(1); opacity: 1; }
-    
-    .swiping { transition: none!important; }
-    .swipe-right { transition: transform 0.3s ease, opacity 0.3s ease; transform: translateX(120%) rotate(10deg); opacity: 0; }
-    .swipe-left { transition: transform 0.3s ease, opacity 0.3s ease; transform: translateX(-120%) rotate(-10deg); opacity: 0; }
-
-    .hide { display: none!important; }
-    
-    /* Settings Sheet */
-    .sheet {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      z-index: 50;
-      background: rgba(0,0,0,0.2);
-      backdrop-filter: blur(4px);
-      opacity: 0; pointer-events: none; transition: opacity 0.2s;
-      display: flex; justify-content: center; align-items: flex-end;
-    }
-    .sheet.open { opacity: 1; pointer-events: auto; }
-    .sheet-content {
-      width: 100%; max-width: 600px;
-      background: var(--bg);
-      border-top-left-radius: 24px;
-      border-top-right-radius: 24px;
-      padding: 24px;
-      padding-bottom: max(24px, env(safe-area-inset-bottom));
-      max-height: 85vh;
-      overflow-y: auto;
-      transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      box-shadow: 0 -10px 40px rgba(0,0,0,0.2);
-    }
-    .sheet.open .sheet-content { transform: translateY(0); }
-    
-    .sheet h2 { margin: 0 0 20px; font-size: 20px; color: var(--ink); }
-    .controls-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    .full { grid-column: span 2; }
-    
-    .fieldset {
-      background: var(--surface);
-      padding: 12px;
-      border-radius: 12px;
-      border: 1px solid var(--metal-border);
-    }
-    .label { font-size: 12px; color: var(--muted); margin-bottom: 6px; display: block; font-weight: 600; text-transform: uppercase; }
-    .select, .range, .chk { width: 100%; }
-
-    /* Helper for keyboard hints */
-    .kbd {
-      background: rgba(0,0,0,0.05);
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-family: monospace;
-      font-size: 0.9em;
-      border: 1px solid rgba(0,0,0,0.1);
-    }
+    .hide{display:none!important}
+    .kbd{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:3px 7px;font-size:12px;color:var(--ink)}
   </style>
 </head>
 <body>
-
 <div class="wrap">
-  <header>
-    <h1>Drawings & Schematics</h1>
+  <header class="row" style="justify-content:space-between">
+    <h1>Flashcards – Electrical (Nima)</h1>
     <div class="row">
-      <span id="status" class="pill">Loading...</span>
-      <button id="openControls" class="btn icon ghost" style="width:40px;height:40px;min-width:auto;min-height:auto">⚙️</button>
+      <span id="status" class="pill">Ready</span>
+      <button id="openControls" class="btn icon ghost" title="Settings">⋯</button>
+      <button id="start" class="btn primary">Start</button>
     </div>
   </header>
 
-  <main class="card-container" id="cardContainer">
-    <div class="card" id="card">
-      <div class="row" style="width:100%; justify-content:space-between; position:absolute; top:20px; left:0; padding:0 24px;">
-        <span class="pill">ID: <b id="indexLabel">—</b></span>
-        <div class="pill">Tap or Space to Flip</div>
-      </div>
+  <main class="card grid" id="card">
+    <div class="row" style="justify-content:space-between;align-items:center;flex-wrap:wrap;">
+      <div class="muted">Tap card or <span class="kbd">Space</span> to flip. Swipe ➡️ = know, ⬅️ = don't know.</div>
+      <span class="pill">ID: <b id="indexLabel">—</b></span>
+    </div>
 
-      <div id="face" class="big">
-        Tap <b>Start</b> to begin.<br><br>
-        <small style="color:var(--muted);font-weight:400;font-size:16px;">
-          Review electrical symbols, schematic logic, and wiring diagrams.
-        </small>
-      </div>
-      
-      <img id="img" class="img hide" alt="" />
+    <div id="face" class="big">Tap <b>Start</b> to begin. Tap card to flip. Swipe right = know, left = don't know.</div>
+    <img id="img" class="img hide" alt="" />
 
-      <div class="markbar">
-        <button id="again" class="btn bad">Review</button>
-        <button id="good" class="btn ok">Mastered</button>
-      </div>
+    <div class="markbar">
+      <button id="again" class="btn bad">I don't know</button>
+      <button id="good" class="btn ok">I know</button>
     </div>
   </main>
 </div>
 
 <div class="fabbar">
-  <button id="start" class="btn primary">Start Session</button>
-  <button id="next" class="btn hide">Next Card</button>
+  <button id="flip" class="btn">Flip</button>
+  <button id="next" class="btn">Next</button>
 </div>
 
-<!-- Settings Modal -->
 <div id="sheet" class="sheet" aria-hidden="true">
-  <div class="sheet-content">
-    <div class="row" style="justify-content:space-between; margin-bottom:16px;">
-      <h2>Settings</h2>
-      <button id="closeSheet" class="btn ghost" style="min-width:40px;">✕</button>
-    </div>
-    
+  <div class="handle"></div>
+  <div class="sheet-header">
+    <h2>Settings</h2>
+    <button id="closeSheet" class="btn close" aria-label="Close">×</button>
+  </div>
+  <div class="content">
     <div class="controls-grid">
       <div class="fieldset">
         <label class="label">Theme</label>
-        <select id="themeSel" class="select" style="width:100%; padding:8px;">
-          <option value="light">Liquid Metal (Light)</option>
-          <option value="dark">Cyber Dark</option>
+        <select id="themeSel" class="select">
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+          <option value="neon-purple">Neon Purple</option>
+          <option value="neon-blue">Neon Blue</option>
         </select>
       </div>
       <div class="fieldset">
-        <label class="label">Shuffle</label>
-        <select id="mode" class="select" style="width:100%; padding:8px;">
-          <option value="random" selected>Random</option>
+        <label class="label">Mode</label>
+        <select id="mode" class="select">
           <option value="ordered">Ordered</option>
+          <option value="random" selected>Random</option>
         </select>
       </div>
-      <div class="fieldset full">
-        <label class="label">Audio</label>
+      <div class="fieldset">
+        <label class="label">Skip Known</label>
+        <input id="skipKnown" type="checkbox" class="chk" checked />
+      </div>
+      <div class="fieldset">
+        <label class="label">Audio Voice</label>
+        <select id="voiceSel" class="select"></select>
+      </div>
+      <div class="fieldset">
+        <label class="label">Audio Rate</label>
+        <input id="rate" class="range" type="range" min="0.6" max="1.4" value="1" step="0.1">
+      </div>
+      <div class="fieldset">
+        <label class="label">Auto Speak</label>
         <div class="row">
-          <label><input id="speakFront" type="checkbox"> Speak Front</label>
-          <label><input id="speakBack" type="checkbox"> Speak Back</label>
+          <label style="font-size:13px;"><input id="speakFront" type="checkbox" style="width:auto;min-height:20px;margin-right:4px;"> Front</label>
+          <label style="font-size:13px;"><input id="speakBack" type="checkbox" style="width:auto;min-height:20px;margin-right:4px;"> Back</label>
         </div>
       </div>
-      <div class="fieldset full">
-        <label class="label">Data</label>
-        <button id="resetProgress" class="btn ghost" style="width:100%; color:var(--bad)">Reset All Progress</button>
+      <div class="fieldset">
+        <label class="label">Re-show "I don't know" after</label>
+        <select id="requeueSel" class="select">
+          <option value="5">5 cards</option>
+          <option value="10" selected>10 cards</option>
+          <option value="20">20 cards</option>
+          <option value="50">50 cards</option>
+        </select>
       </div>
-      <div class="fieldset full">
+      <div class="fieldset">
+        <label class="label">Progress</label>
+        <button id="resetProgress" class="btn" style="width:100%">Reset Known/Seen</button>
+      </div>
+      <div class="fieldset">
         <label class="label">Stats</label>
-        <div class="row" style="flex-wrap:wrap; gap:8px;">
+        <div class="row" style="gap:8px;flex-wrap:wrap">
+          <span class="pill">Total: <b id="statTotal">0</b></span>
           <span class="pill">Known: <b id="statKnown">0</b></span>
-          <span class="pill">To Learn: <b id="statUnknown">0</b></span>
+          <span class="pill">Unknown: <b id="statUnknown">0</b></span>
+          <span class="pill">Seen: <b id="statSeen">0</b></span>
         </div>
       </div>
     </div>
@@ -397,290 +162,692 @@
 </div>
 
 <script>
-// ===== ELECTRICAL DRAWINGS FLASHCARDS CONFIG =====
-// Re-branded and isolated from NPPE app
+// ===== Clean UI + tap flip + flip animation + swipe-to-grade + requeue unknowns =====
 
-const CSV_URL = 'assets/cards.csv'; 
-const STORAGE_KEY = 'elec_drawings_progress_v1';
-const AUDIO_KEY = 'elec_audio_prefs_v1';
-const THEME_KEY = 'elec_theme_v1';
-
-// Default "Sample" Deck if no CSV is found
-const SAMPLE_DECK = `id,front,back
-1,Symbol: Zig-zag line,"Resistor (Opposition to current flow)"
-2,Symbol: Two parallel lines of equal length,"Capacitor"
-3,Symbol: Two parallel lines; one shorter and thicker,"Battery / DC Voltage Source"
-4,Symbol: Circle with an 'M',"Motor"
-5,NO Contact,"Normally Open (Open circuit when de-energized)"
-6,NC Contact,"Normally Closed (Closed circuit when de-energized)"
-7,Symbol: Three horizontal lines of decreasing width,"Ground / Earth"
-8,Schematic vs Wiring Diagram,"Schematic shows logic/function. Wiring shows physical connections."
-9,Symbol: Circle with a cross,"Light Bulb / Lamp"
-10,Relay Coil Symbol,"Circle (often with letter K or CR inside)"`;
-
-const DELAY_NEXT_MS = 350; 
-const DELAY_FLIP_MS = 800;
+const CSV_URL = 'assets/cards.csv';
+const STORAGE_KEY = 'nppe_cards_progress_clean_v5';
+const AUDIO_KEY = 'nppe_audio_prefs_v2';
+const REQUEUE_KEY = 'nppe_requeue_dist_v1';
+const THEME_KEY = 'nppe_theme_v1';
+const DELAY_NEXT_MS = 450; 
+const DELAY_FLIP_MS = 1000;
 
 let deck = [];
 let cursor = -1;
 let showingBack = false;
 let voices = [];
-let audioPrefs = { voiceURI: '', rate: 1.0, speakFront: true, speakBack: false }; // Defaults adjusted for diagrams
+let audioPrefs = { voiceURI: '', rate: 1, speakFront: true, speakBack: true };
 let speakTimer = null;
-let pending = []; // Queue for immediate re-show
+let requeueDistance = 10;
+let pending = [];
 let isFlipping = false;
 
-// DOM Elements
 const $ = s => document.querySelector(s);
-const cardEl = $('#card');
 const face = $('#face');
 const img = $('#img');
 const status = $('#status');
 const startBtn = $('#start');
-const nextBtn = $('#next');
+const openBtn = $('#openControls');
 const sheet = $('#sheet');
+const cardEl = document.querySelector('main.card');
+const modeSel = $('#mode');
+const skipKnownChk = $('#skipKnown');
 const idxLabel = $('#indexLabel');
+const statTotal = $('#statTotal');
 const statKnown = $('#statKnown');
 const statUnknown = $('#statUnknown');
+const statSeen = $('#statSeen');
+const voiceSel = $('#voiceSel');
+const rateIn = $('#rate');
+const speakFrontChk = $('#speakFront');
+const speakBackChk = $('#speakBack');
+const requeueSel = $('#requeueSel');
+const themeSel = $('#themeSel');
 
-// Init
+// Sheet controls
+openBtn.addEventListener('click', () => toggleSheet(true));
+$('#closeSheet').addEventListener('click', () => toggleSheet(false));
+sheet.addEventListener('click', e => { if (e.target === sheet) toggleSheet(false) });
+
+function toggleSheet(open) {
+  sheet.classList.toggle('open', !!open);
+  sheet.setAttribute('aria-hidden', open ? 'false' : 'true');
+}
+
+// Theme handling
+function loadTheme() {
+  const saved = localStorage.getItem(THEME_KEY) || 'light';
+  document.documentElement.setAttribute('data-theme', saved);
+  if (themeSel) themeSel.value = saved;
+}
+
+function saveTheme(theme) {
+  localStorage.setItem(THEME_KEY, theme);
+  document.documentElement.setAttribute('data-theme', theme);
+}
+
+if (themeSel) {
+  themeSel.addEventListener('change', () => saveTheme(themeSel.value));
+}
+
+// Initialize
 (async function init() {
   loadTheme();
-  loadAudioPrefs();
   
-  // Load Voices
-  if ('speechSynthesis' in window) {
-    speechSynthesis.onvoiceschanged = () => { voices = speechSynthesis.getVoices(); };
+  // Load audio prefs
+  try {
+    const raw = localStorage.getItem(AUDIO_KEY);
+    if (raw) Object.assign(audioPrefs, JSON.parse(raw));
+  } catch (e) {}
+  
+  rateIn.value = audioPrefs.rate;
+  speakFrontChk.checked = !!audioPrefs.speakFront;
+  speakBackChk.checked = !!audioPrefs.speakBack;
+
+  await loadVoices();
+  populateVoiceSelect();
+
+  // Load requeue setting
+  try {
+    requeueDistance = parseInt(localStorage.getItem(REQUEUE_KEY) || '10', 10);
+  } catch (e) {
+    requeueDistance = 10;
+  }
+  
+  if (requeueSel) {
+    requeueSel.value = String(requeueDistance);
+    requeueSel.addEventListener('change', () => {
+      requeueDistance = parseInt(requeueSel.value || '10', 10);
+      localStorage.setItem(REQUEUE_KEY, String(requeueDistance));
+    });
   }
 
-  // Load Data
+  // Load CSV deck or use sample data
   try {
     let text;
     try {
-      const response = await fetch(CSV_URL);
-      if (!response.ok) throw new Error("No CSV");
+      const response = await fetch(CSV_URL, { cache: 'no-store' });
+      if (!response.ok) throw new Error('CSV not found');
       text = await response.text();
-      status.textContent = 'CSV Loaded';
-    } catch {
-      text = SAMPLE_DECK;
       status.textContent = 'Ready';
+    } catch (fetchError) {
+      // Use sample data if CSV not found
+      text = `id,front,back
+1,What is the capital of France?,Paris
+2,What is 2 + 2?,4
+3,What color is the sky?,Blue
+4,Who wrote Romeo and Juliet?,William Shakespeare
+5,What is H2O?,Water
+6,How many continents are there?,7
+7,What is the largest planet?,Jupiter
+8,What is the speed of light?,"299,792,458 m/s"`;
+      status.textContent = 'Sample Data';
     }
+
+    const rows = parseCSV(text);
+    if (!rows.length) throw new Error('No data');
     
-    deck = parseCSV(text).map((r, i) => ({
-      id: r[0] || `c${i}`,
-      front: r[1],
-      back: r[2],
+    const header = rows[0].map(x => String(x || '').toLowerCase().trim());
+    const hasHeader = header && header[0] === 'id' && header[1] === 'front' && header[2] === 'back';
+    const data = (hasHeader ? rows.slice(1) : rows).filter(r => 
+      (r[0] || '').trim() && (r[1] || '').trim() && (r[2] || '').trim()
+    );
+    
+    deck = data.map((r, i) => ({
+      id: normalizeId(r[0] || `card${i + 1}`),
+      front: (r[1] || '').trim(),
+      back: (r[2] || '').trim(),
       known: false,
       seen: 0
-    })).filter(c => c.front && c.back); // Filter empty rows
+    }));
+
+    // Ensure unique IDs
+    const seen = new Set();
+    for (const c of deck) {
+      let base = c.id;
+      let n = 2;
+      while (seen.has(c.id)) {
+        c.id = `${base}-${n++}`;
+      }
+      seen.add(c.id);
+    }
 
     loadProgress();
     updateStats();
     
-  } catch(e) {
-    face.textContent = 'Error: ' + e.message;
+  } catch (e) {
+    status.textContent = 'Error';
+    face.innerHTML = 'Error loading cards: ' + e.message;
+    console.error(e);
   }
 })();
 
-// UI Logic
+// Button listeners
 startBtn.addEventListener('click', () => {
-  startBtn.classList.add('hide');
-  nextBtn.classList.remove('hide');
-  next();
-  warmUpAudio();
+  start();
+  warmUpSpeech();
 });
 
-nextBtn.addEventListener('click', next);
-$('#openControls').addEventListener('click', () => sheet.classList.add('open'));
-$('#closeSheet').addEventListener('click', () => sheet.classList.remove('open'));
-$('#themeSel').addEventListener('change', (e) => saveTheme(e.target.value));
+$('#next').addEventListener('click', () => next());
+$('#flip').addEventListener('click', () => flip());
+$('#good').addEventListener('click', () => grade(true));
+$('#again').addEventListener('click', () => grade(false));
+$('#resetProgress').addEventListener('click', () => {
+  if (confirm('Clear Known/Unknown and Seen counts?')) {
+    deck.forEach(c => {
+      c.known = false;
+      c.seen = 0;
+    });
+    saveProgress();
+    updateStats();
+    renderFace();
+  }
+});
 
-$('#again').addEventListener('click', (e) => { e.stopPropagation(); grade(false); });
-$('#good').addEventListener('click', (e) => { e.stopPropagation(); grade(true); });
-$('#card').addEventListener('click', flip);
-
-// Keyboard
+// Keyboard shortcuts
 document.addEventListener('keydown', e => {
-  if(e.key === ' ' || e.key === 'Enter') { e.preventDefault(); flip(); }
-  if(e.key === 'ArrowRight') next();
+  if (e.key === ' ') {
+    e.preventDefault();
+    flip();
+  }
+  if (e.key === 'ArrowRight') {
+    next();
+  }
+  if (e.key === '1') {
+    grade(false);
+  }
+  if (e.key === '2') {
+    grade(true);
+  }
 });
 
-// Core Functions
-function next() {
-  // Logic: 20% chance to see a pending "unknown" card if available, else random
-  let pool = deck.filter(c => !c.known);
+// Tap-to-flip
+cardEl.addEventListener('click', (e) => {
+  if (
+    e.target.closest('.markbar') ||
+    e.target.closest('.fabbar') ||
+    e.target.closest('#openControls') ||
+    e.target.closest('#sheet')
+  ) return;
+  flip();
+}, { passive: true });
+
+function start() {
+  cursor = -1;
+  showingBack = false;
+  next();
+}
+
+function eligibleIndices() {
+  const skip = skipKnownChk.checked;
+  const mode = modeSel.value;
+  let idx = deck.map((_, i) => i);
   
-  if (pool.length === 0) {
-    face.innerHTML = "🎉 All Cards Mastered!<br><small>Reset progress in settings to restart.</small>";
-    hideImage();
+  if (skip) idx = idx.filter(i => !deck[i].known);
+  
+  if (mode === 'ordered') {
+    const s = Math.max(cursor + 1, 0);
+    const tail = idx.filter(i => i >= s);
+    const head = idx.filter(i => i < s);
+    return tail.length ? tail : head;
+  }
+  
+  return idx;
+}
+
+function next() {
+  if (!deck.length) return;
+  
+  // Check if any queued unknown is due
+  const revisit = tickPendingAndMaybePop();
+  if (revisit >= 0) {
+    cursor = revisit;
+    deck[cursor].seen++;
+    saveProgress();
+    showingBack = false;
+    renderFace('next');
     return;
   }
-
-  // Pick card
-  const r = Math.floor(Math.random() * pool.length);
-  const nextCard = pool[r];
-  cursor = deck.findIndex(c => c.id === nextCard.id);
   
+  // Otherwise pick per mode/skipKnown
+  const choices = eligibleIndices();
+  if (!choices.length) {
+    face.innerHTML = 'All done 🎉 Uncheck <b>Skip Known</b> to review again.';
+    hideImage();
+    idxLabel.textContent = '—';
+    cancelSpeak();
+    return;
+  }
+  
+  cursor = (modeSel.value === 'random') ? 
+    choices[Math.floor(Math.random() * choices.length)] : 
+    choices[0];
+  
+  deck[cursor].seen++;
+  saveProgress();
   showingBack = false;
-  render();
+  renderFace('next');
 }
 
 function flip() {
-  if (isFlipping || cursor < 0) return;
+  if (cursor < 0 || isFlipping) return;
+  
+  if (!cardEl) {
+    showingBack = !showingBack;
+    renderFace('flip');
+    return;
+  }
+  
   isFlipping = true;
   cardEl.classList.add('flip-anim', 'flip-phase');
   
   setTimeout(() => {
     showingBack = !showingBack;
-    render();
+    renderFace('flip');
     cardEl.classList.remove('flip-phase');
     cardEl.classList.add('flip-reset');
+    
     setTimeout(() => {
       cardEl.classList.remove('flip-anim', 'flip-reset');
       isFlipping = false;
-    }, 250);
-  }, 200);
+    }, 240);
+  }, 160);
 }
 
-function render() {
-  const c = deck[cursor];
-  idxLabel.textContent = c.id;
-  face.innerHTML = showingBack ? escapeHtml(c.back) : escapeHtml(c.front);
-  
-  // Image handling (basic)
-  hideImage();
-  if (showingBack) tryShowImage(c.id);
-
-  speakText(showingBack ? c.back : c.front, showingBack ? 'back' : 'front');
-}
-
-function grade(isKnown) {
+function grade(known) {
   if (cursor < 0) return;
-  deck[cursor].known = isKnown;
-  deck[cursor].seen++;
+  
+  const id = deck[cursor].id;
+  
+  if (known) {
+    deck[cursor].known = true;
+    pending = pending.filter(p => p.id !== id);
+  } else {
+    deck[cursor].known = false;
+    queueCard(id);
+  }
+  
   saveProgress();
   updateStats();
-  
-  // Visual feedback
-  const anim = isKnown ? 'swipe-right' : 'swipe-left';
-  cardEl.classList.add(anim);
-  setTimeout(() => {
-    cardEl.classList.remove(anim);
-    next();
-  }, 250);
+  next();
 }
 
-// Data & Helpers
-function parseCSV(str) {
-  // Simple parser assuming id,front,back header
-  const lines = str.split('\n').filter(l => l.trim().length > 0);
-  const data = [];
-  // Skip header if present
-  const start = lines[0].toLowerCase().includes('front') ? 1 : 0;
-  
-  for (let i = start; i < lines.length; i++) {
-    // Basic CSV regex to handle quotes
-    const parts = lines[i].match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g); 
-    // Fallback split if regex fails or simple CSV
-    const cols = parts ? parts.map(p => p.replace(/^"|"$/g, '')) : lines[i].split(',');
-    if (cols.length >= 2) data.push(cols);
+function renderFace(trigger) {
+  if (cursor < 0) {
+    face.textContent = 'Press Start';
+    return;
   }
-  return data;
+  
+  const c = deck[cursor];
+  idxLabel.textContent = c.id;
+  face.innerHTML = showingBack ? escape(c.back) : escape(c.front);
+  
+  if (showingBack) {
+    showImageForId(c.id);
+  } else {
+    hideImage();
+  }
+  
+  updateStats();
+  autoSpeakCurrent(trigger);
 }
 
-function saveProgress() {
-  const data = deck.map(c => ({ id: c.id, known: c.known, seen: c.seen }));
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+function hideImage() {
+  img.classList.add('hide');
+  img.removeAttribute('src');
+  img.alt = '';
 }
 
-function loadProgress() {
-  const raw = localStorage.getItem(STORAGE_KEY);
-  if (!raw) return;
-  const map = new Map(JSON.parse(raw).map(i => [i.id, i]));
-  deck.forEach(c => {
-    if (map.has(c.id)) {
-      c.known = map.get(c.id).known;
-      c.seen = map.get(c.id).seen;
+function showImageForId(id) {
+  const exts = ['png', 'jpg', 'jpeg', 'webp', 'svg'];
+  let i = 0;
+  
+  const tryNext = () => {
+    if (i >= exts.length) {
+      hideImage();
+      return;
     }
-  });
+    
+    const src = `assets/images/${id}.${exts[i++]}`;
+    img.onerror = tryNext;
+    img.onload = () => {
+      img.onerror = null;
+      img.alt = id;
+      img.classList.remove('hide');
+    };
+    img.src = src;
+  };
+  
+  tryNext();
 }
 
 function updateStats() {
-  const k = deck.filter(c => c.known).length;
-  statKnown.textContent = k;
-  statUnknown.textContent = deck.length - k;
+  const total = deck.length;
+  const known = deck.filter(c => c.known).length;
+  const seen = deck.reduce((a, c) => a + (c.seen > 0 ? 1 : 0), 0);
+  
+  if (statTotal) statTotal.textContent = total;
+  if (statKnown) statKnown.textContent = known;
+  if (statUnknown) statUnknown.textContent = Math.max(0, total - known);
+  if (statSeen) statSeen.textContent = seen;
 }
 
-function escapeHtml(text) {
-  return text
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
+function saveProgress() {
+  const payload = deck.map(c => ({
+    id: c.id,
+    known: c.known,
+    seen: c.seen
+  }));
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
 }
 
-// Theme
-function loadTheme() {
-  const t = localStorage.getItem(THEME_KEY) || 'light';
-  document.documentElement.setAttribute('data-theme', t);
-  $('#themeSel').value = t;
-}
-function saveTheme(t) {
-  localStorage.setItem(THEME_KEY, t);
-  document.documentElement.setAttribute('data-theme', t);
-}
-
-// Audio
-function loadAudioPrefs() {
+function loadProgress() {
   try {
-    const s = JSON.parse(localStorage.getItem(AUDIO_KEY));
-    if(s) Object.assign(audioPrefs, s);
-  } catch {}
-  $('#speakFront').checked = audioPrefs.speakFront;
-  $('#speakBack').checked = audioPrefs.speakBack;
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    
+    const arr = JSON.parse(raw);
+    const map = new Map(arr.map(x => [x.id, x]));
+    
+    deck.forEach(c => {
+      const m = map.get(c.id);
+      if (m) {
+        c.known = !!m.known;
+        c.seen = m.seen | 0;
+      }
+    });
+  } catch (e) {}
+}
+
+// Swipe-to-grade
+(function() {
+  if (!cardEl) return;
   
-  $('#speakFront').addEventListener('change', e => { audioPrefs.speakFront = e.target.checked; saveAudio(); });
-  $('#speakBack').addEventListener('change', e => { audioPrefs.speakBack = e.target.checked; saveAudio(); });
-}
-function saveAudio() { localStorage.setItem(AUDIO_KEY, JSON.stringify(audioPrefs)); }
-function warmUpAudio() { if('speechSynthesis' in window) speechSynthesis.speak(new SpeechSynthesisUtterance(' ')); }
-
-function speakText(txt, side) {
-  if (!('speechSynthesis' in window)) return;
-  const shouldSpeak = side === 'front' ? audioPrefs.speakFront : audioPrefs.speakBack;
-  if (!shouldSpeak) return;
-
-  if (speakTimer) clearTimeout(speakTimer);
-  speechSynthesis.cancel();
+  let startX = 0, startY = 0, dx = 0, active = false;
+  const THRESH = 90;
   
-  speakTimer = setTimeout(() => {
-    const u = new SpeechSynthesisUtterance(txt);
-    speechSynthesis.speak(u);
-  }, 200);
-}
-
-// Basic Image loader for back of card
-function tryShowImage(id) {
-  img.classList.add('hide');
-  // In a real app, you'd know the extension. Here we blindly try PNG then JPG
-  img.onerror = () => {
-    if (img.src.endsWith('.png')) img.src = `assets/images/${id}.jpg`;
-    else if (img.src.endsWith('.jpg')) img.src = `assets/images/${id}.svg`;
-  };
-  img.onload = () => img.classList.remove('hide');
-  img.src = `assets/images/${id}.png`;
-}
-
-// Reset Logic
-$('#resetProgress').addEventListener('click', () => {
-  if(confirm("Reset all progress?")) {
-    deck.forEach(c => { c.known = false; c.seen = 0; });
-    saveProgress();
-    updateStats();
-    next();
+  cardEl.addEventListener('touchstart', (e) => {
+    if (e.touches.length !== 1) return;
+    if (document.querySelector('#sheet.open')) return;
+    
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+    dx = 0;
+    active = true;
+    cardEl.classList.add('swiping');
+  }, { passive: true });
+  
+  cardEl.addEventListener('touchmove', (e) => {
+    if (!active) return;
+    
+    const x = e.touches[0].clientX;
+    const y = e.touches[0].clientY;
+    dx = x - startX;
+    const dy = y - startY;
+    
+    if (Math.abs(dy) > Math.abs(dx) + 20) {
+      active = false;
+      cardEl.classList.remove('swiping');
+      cardEl.style.transform = '';
+      return;
+    }
+    
+    cardEl.style.transform = `translateX(${dx}px) rotate(${dx * 0.04}deg)`;
+  }, { passive: true });
+  
+  function endSwipe() {
+    cardEl.classList.remove('swiping');
+    cardEl.style.transform = '';
   }
-});
+  
+  cardEl.addEventListener('touchend', () => {
+    if (!active) return;
+    active = false;
+    
+    if (dx > THRESH) {
+      cardEl.classList.remove('swipe-left');
+      cardEl.classList.add('swipe-right');
+      setTimeout(() => {
+        cardEl.classList.remove('swipe-right');
+        endSwipe();
+        grade(true);
+      }, 240);
+    } else if (dx < -THRESH) {
+      cardEl.classList.remove('swipe-right');
+      cardEl.classList.add('swipe-left');
+      setTimeout(() => {
+        cardEl.classList.remove('swipe-left');
+        endSwipe();
+        grade(false);
+      }, 240);
+    } else {
+      endSwipe();
+    }
+  }, { passive: true });
+  
+  cardEl.addEventListener('touchcancel', () => {
+    active = false;
+    endSwipe();
+  }, { passive: true });
+})();
+
+// Requeue helpers
+function queueCard(id) {
+  const existing = pending.find(p => p.id === id);
+  if (existing) {
+    existing.due = requeueDistance;
+    return;
+  }
+  pending.push({ id, due: requeueDistance });
+}
+
+function tickPendingAndMaybePop() {
+  if (!pending.length) return -1;
+  
+  for (const p of pending) {
+    if (p.due > 0) p.due--;
+  }
+  
+  const idx = pending.findIndex(p => p.due === 0);
+  if (idx >= 0) {
+    const id = pending.splice(idx, 1)[0].id;
+    const i = deck.findIndex(c => c.id === id);
+    return i;
+  }
+  
+  return -1;
+}
+
+// Audio functions
+async function loadVoices() {
+  return new Promise(res => {
+    const ready = () => {
+      const v = speechSynthesis.getVoices();
+      if (v && v.length) {
+        voices = v;
+        speechSynthesis.removeEventListener('voiceschanged', ready);
+        res();
+      }
+    };
+    
+    speechSynthesis.addEventListener('voiceschanged', ready);
+    ready();
+    
+    setTimeout(() => {
+      voices = speechSynthesis.getVoices();
+      res();
+    }, 800);
+  });
+}
+
+function populateVoiceSelect() {
+  voiceSel.innerHTML = '';
+  const opts = voices.length ? voices : [{ name: 'Default', voiceURI: '' }];
+  
+  const sorted = opts.slice().sort((a, b) => {
+    const la = (a.lang || '').toLowerCase();
+    const lb = (b.lang || '').toLowerCase();
+    const pa = (la.includes('en-ca') || la.includes('en-us')) ? 0 : 1;
+    const pb = (lb.includes('en-ca') || lb.includes('en-us')) ? 0 : 1;
+    return pa - pb || (a.name || '').localeCompare(b.name || '');
+  });
+  
+  for (const v of sorted) {
+    const o = document.createElement('option');
+    o.value = v.voiceURI || v.name || '';
+    o.textContent = v.name ? `${v.name} (${v.lang || ''})` : 'Default';
+    voiceSel.appendChild(o);
+  }
+  
+  if (audioPrefs.voiceURI) {
+    voiceSel.value = audioPrefs.voiceURI;
+  }
+}
+
+function warmUpSpeech() {
+  if (!('speechSynthesis' in window)) return;
+  try {
+    const u = new SpeechSynthesisUtterance(' ');
+    u.volume = 0;
+    speechSynthesis.speak(u);
+    speechSynthesis.cancel();
+  } catch (e) {}
+}
+
+function saveAudioPrefs() {
+  localStorage.setItem(AUDIO_KEY, JSON.stringify(audioPrefs));
+}
+
+function cancelSpeak() {
+  if (speakTimer) {
+    clearTimeout(speakTimer);
+    speakTimer = null;
+  }
+  try {
+    speechSynthesis.cancel();
+  } catch (e) {}
+}
+
+function autoSpeakCurrent(trigger) {
+  if (!('speechSynthesis' in window)) return;
+  
+  const c = deck[cursor];
+  if (!c) return;
+  
+  const text = showingBack ? c.back : c.front;
+  const want = showingBack ? audioPrefs.speakBack : audioPrefs.speakFront;
+  
+  if (!want || !text) {
+    cancelSpeak();
+    return;
+  }
+  
+  const delay = (trigger === 'flip') ? DELAY_FLIP_MS : DELAY_NEXT_MS;
+  cancelSpeak();
+  speakTimer = setTimeout(() => speak(text), delay);
+}
+
+function speak(txt) {
+  try {
+    speechSynthesis.cancel();
+  } catch (e) {}
+  
+  if (!txt) return;
+  
+  const u = new SpeechSynthesisUtterance(txt);
+  u.rate = audioPrefs.rate || 1;
+  
+  const v = voices.find(v => v.voiceURI === audioPrefs.voiceURI || v.name === audioPrefs.voiceURI);
+  if (v) u.voice = v;
+  
+  try {
+    speechSynthesis.pause();
+    speechSynthesis.resume();
+  } catch (e) {}
+  
+  setTimeout(() => {
+    try {
+      speechSynthesis.speak(u);
+    } catch (e) {}
+  }, 0);
+}
+
+function normalizeId(raw) {
+  let s = String(raw).trim().toLowerCase();
+  const m = s.match(/(\d+)/);
+  if (m) {
+    return `card${parseInt(m[1], 10)}`;
+  }
+  if (s.startsWith('card')) return s;
+  return s ? `card-${s}` : 'card0';
+}
+
+function parseCSV(str) {
+  const rows = [];
+  let row = [];
+  let cur = '';
+  let i = 0;
+  let inQ = false;
+  
+  while (i < str.length) {
+    const ch = str[i];
+    
+    if (inQ) {
+      if (ch === '"') {
+        if (str[i + 1] === '"') {
+          cur += '"';
+          i += 2;
+          continue;
+        }
+        inQ = false;
+        i++;
+        continue;
+      }
+      cur += ch;
+      i++;
+      continue;
+    } else {
+      if (ch === '"') {
+        inQ = true;
+        i++;
+        continue;
+      }
+      if (ch === ',') {
+        row.push(cur);
+        cur = '';
+        i++;
+        continue;
+      }
+      if (ch === '\n') {
+        row.push(cur);
+        rows.push(row);
+        row = [];
+        cur = '';
+        i++;
+        continue;
+      }
+      if (ch === '\r') {
+        i++;
+        continue;
+      }
+      cur += ch;
+      i++;
+    }
+  }
+  
+  row.push(cur);
+  rows.push(row);
+  
+  return rows.filter(r => r.length > 1 || (r.length === 1 && r[0].trim() !== ''));
+}
+
+function escape(s) {
+  return (s || '').replace(/[&<>]/g, m => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;'
+  }[m]));
+}
 </script>
 </body>
 </html>
